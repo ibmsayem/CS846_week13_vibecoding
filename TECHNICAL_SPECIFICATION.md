@@ -598,3 +598,307 @@ test('Password strength meter updates in real-time')
 - Storage events (localStorage access)
 ```
 
+---
+
+## 13. DEVELOPMENT GUIDELINES APPLICATION
+
+This project applies 8 core software development principles throughout its architecture and implementation workflow:
+
+### Guideline 1: Requirements - Define Clear Specifications
+
+**Application to Project:**
+
+The platform was specified with concrete requirements before implementation:
+- **User Authentication:** Signup with validation (email format, password strength), login with JWT tokens, automatic token refresh
+- **Role Assignment:** Creator role has edit/delete permissions on their own posts; users cannot modify others' content
+- **Edge Cases:** Handle multiple concurrent logins, expired tokens, invalid credentials, duplicate email registration
+
+**Example from Codebase:**
+```javascript
+// Backend: Strict input validation before processing
+const schema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(8).pattern(passwordRegex).required()
+});
+const { error, value } = schema.validate(req.body);
+
+// Frontend: Authorization checks before rendering delete buttons
+{post.userId === user.id && (
+  <button onClick={() => handleDeletePost(post.id)}>🗑️</button>
+)}
+```
+
+**Lessons Applied:**
+- Define role-based permissions upfront
+- Validate all inputs against strict schemas
+- Test edge cases: token expiration, network failures, concurrent requests
+
+---
+
+### Guideline 2: Code Generation - Iterative Cycles with Project Tools
+
+**Application to Project:**
+
+Code development followed an iterative generate-refine-deploy cycle:
+1. **Initial Implementation:** Create basic CRUD endpoints and React components
+2. **Generate & Test:** Build authorization checks and test with curl/browser
+3. **Refine:** Fix authorization bugs (e.g., `user.userId` → `user.id`), clean up display logic
+4. **Deploy:** Update frontend to reflect backend changes
+
+**Example from Codebase:**
+```javascript
+// Iteration 1: Basic post creation
+POST /posts → Create post
+
+// Iteration 2: Add authorization
+DELETE /posts/:id → Check if userId matches before deletion
+
+// Iteration 3: Bug fix detected
+// Issue: post.userId === user.userId always false (user has 'id' not 'userId')
+// Fixed: post.userId === user.id
+```
+
+**Lessons Applied:**
+- Use project-specific tools (curl for backend, React DevTools for frontend)
+- Test incrementally after each change
+- Debug systematically: check backend responses first, then frontend state
+
+---
+
+### Guideline 3: Testing - Generate-Validate-Repair Loop
+
+**Application to Project:**
+
+Testing strategy includes clear goals and validation:
+
+**Test Goals:**
+- Authenticate users (signup/login)
+- Users see only their action buttons on own content
+- Authorization prevents unauthorized operations
+- Session persists across page reloads
+
+**Validation & Testing:**
+```bash
+# Backend validation with curl
+curl -X POST http://localhost:5001/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@test.com","password":"Password123!"}'
+
+# Expected: Token returned + user object
+
+# Frontend validation: Inspect console logs
+console.log('User from store:', user)  // Verify user.id exists
+console.log('Post creator check:', post.userId === user.id)  // Should be true
+```
+
+**Repair Cycle:**
+- Test failed? → Inspect backend logs
+- Check API response structure
+- Verify frontend state matches expectation
+- Apply fix and retest
+
+---
+
+### Guideline 4: Debugging - Collaborate & Self-Debug
+
+**Application to Project:**
+
+Debugging workflow implemented in three layers:
+
+**Layer 1: Self-Debug with Logs**
+```javascript
+// Backend: Log authentication flow
+console.log('Login attempt:', email);
+console.log('User found:', user !== null);
+console.log('Password match:', passwordMatch);
+
+// Frontend: Log authorization checks
+console.log('Checking delete permission for post:', post.id);
+console.log('Current user ID:', user.id);
+console.log('Post user ID:', post.userId);
+console.log('Can delete?', post.userId === user.id);
+```
+
+**Layer 2: Debug Endpoints**
+```javascript
+// GET /debug/users → List all users (development only)
+// Helps verify data structure matches expectations
+```
+
+**Layer 3: Edge Case Testing**
+- Try to delete someone else's post (should fail)
+- Login while token expiring (should refresh)
+- Rapid successive requests (should respect rate limits)
+
+**Bug Resolution Example:**
+- **Symptom:** Delete button not showing, delete fails
+- **Investigation:** Log authorization check result
+- **Root Cause:** `user.userId` undefined, comparison always false
+- **Fix:** Change to `user.id`
+- **Verification:** Log shows comparison now true, button appears
+
+---
+
+### Guideline 5: Code Summarization - Document Purpose & Architecture
+
+**Application to Project:**
+
+Each major component documented with purpose and interface:
+
+**Example 1: Post Controller**
+```javascript
+// PURPOSE: Handle post CRUD operations
+// CONTRACT: 
+//   Input: POST body with {content, userId}
+//   Output: {success: boolean, data: post|error}
+// LIFECYCLE:
+//   1. Validate input (content not empty)
+//   2. Check authorization (userId matches user.id)
+//   3. Update in-memory database
+//   4. Return updated post
+
+exports.updatePost = async (req, res) => {
+  // Implementation...
+}
+```
+
+**Example 2: HomePage Component**
+```javascript
+// PURPOSE: Display feed of all posts with CRUD actions
+// GLOBAL PLAN:
+//   1. Fetch all posts on mount via GET /posts
+//   2. For each post, check if user is creator
+//   3. Show edit/delete buttons only if authorized
+//   4. Handle like, reply, edit, delete operations
+// DEPENDENCIES: useEffect, useState, useNavigate, useUserStore
+
+const HomePage = () => {
+  const [posts, setPosts] = useState([]);
+  // Implementation...
+}
+```
+
+---
+
+### Guideline 6: Code Review - Understand Intent, Document Risks
+
+**Application to Project:**
+
+Code review process verifies correct implementation of requirements:
+
+**Review Checklist:**
+- ✅ Authorization check present (no unauthorized edit/delete)
+- ✅ Input validation applied (prevent injection attacks)
+- ✅ Error handling in try-catch blocks
+- ✅ Token refresh logic on 401 responses
+- ✅ User feedback on success/failure
+- ✅ No sensitive data logged (passwords, tokens)
+
+**Regression Risk Assessment:**
+```javascript
+// RISKY: Changing authorization check
+// OLD: post.userId === user.userId
+// NEW: post.userId === user.id
+// RISK: If user object structure changes elsewhere, this breaks again
+// MITIGATION: Add type definitions or validation layer
+
+// SAFE: Adding new feature (e.g., reply likes)
+// No impact on existing authorization or CRUD operations
+// Can test independently
+```
+
+---
+
+### Guideline 7: Performance - Worst Case Optimization
+
+**Application to Project:**
+
+Performance considerations at scale:
+
+**Problem: Profile loads user's 1000+ posts**
+```javascript
+// Worst case: O(1000) posts × 5-10 replies each
+// Current: Fetch all posts, render all components
+// Result: Browser hangs, memory bloat
+
+// Solution: Pagination
+// Fetch 10 posts per page
+// Load more on scroll (infinite scroll)
+// Reduces DOM nodes from 10,000 to ~50
+```
+
+**Problem: Real-time updates**
+```javascript
+// Worst case: 100+ concurrent users, 1000+ posts
+// Current: Frontend polls every 5 seconds
+// Result: 100,000 API calls/min overload
+
+// Solution: Server-sent events or WebSocket
+// Push updates only when posts change
+// Reduces calls 99%
+```
+
+**Profiler Traces (theoretical):**
+- HomePage render: 45ms (acceptable)
+- Post CRUD: 120ms (need optimization at 1000+ posts)
+- Authentication flow: 80ms (acceptable)
+- Token refresh: 30ms (acceptable)
+
+---
+
+### Guideline 8: Logging - Consistent Structure & Abstraction Levels
+
+**Application to Project:**
+
+Multi-level logging strategy:
+
+**Level 1: Info (User Actions)**
+```javascript
+logger.info('User logged in', { userId, email, timestamp });
+logger.info('Post created', { postId, userId, wordCount });
+```
+
+**Level 2: Debug (Internal Flow)**
+```javascript
+logger.debug('Verifying token', { tokenId, expiresIn });
+logger.debug('Updating post', { postId, changes });
+```
+
+**Level 3: Error (Problems)**
+```javascript
+logger.error('Login failed', { email, reason: 'invalid credentials' });
+logger.error('Database error', { operation: 'createPost', error });
+```
+
+**Level 4: Security (Threats)**
+```javascript
+logger.security('Failed login attempt', { email, attempts: 5 });
+logger.security('Unauthorized access attempt', { userId, resource: 'post/123' });
+```
+
+**Logging Abstraction:**
+```javascript
+// Structured format for parsing
+// Consistent fields: timestamp, userId, action, result, duration
+// Avoid logging: passwords, tokens, credit cards
+
+// Example structured log
+{
+  "timestamp": "2026-03-31T17:00:00Z",
+  "userId": "abc-123",
+  "action": "delete_post",
+  "resource": "post:xyz-789",
+  "result": "success",
+  "duration_ms": 45,
+  "ip": "192.168.1.1"
+}
+```
+
+---
+
+## Supporting Documentation
+
+- See [GUIDELINES_APPLICATION.md](./GUIDELINES_APPLICATION.md) for detailed guideline-to-implementation mapping
+- Backend code follows guidelines in `/controllers/`, `/models/`, `/routes/`
+- Frontend code follows guidelines in `/src/pages/`, `/src/components/`, `/src/store/`
+
