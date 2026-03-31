@@ -1,0 +1,41 @@
+[
+  {
+    "id": "93f68ca8-eadc-4df8-9385-24dda0122884",
+    "email": "testuser@example.com",
+    "username": "testuser",
+    "passwordHash": "$2a$12$roPHnYZzMtWcTY5.tjWEweyoNQ2HtF.UUi9zEAa98kRFTLvDk01Om",
+    "firstName": "Test",
+    "lastName": "User",
+    "bio": "",
+    "profilePicture": "",
+    "isVerified": false,
+    "createdAt": "2026-03-31T18:09:03.402Z",
+    "updatedAt": "2026-03-31T18:09:03.402Z"
+  },
+  {
+    "id": "963fec85-03b7-494f-bf22-06250571d4a3",
+    "email": "ibm@gmail.com",
+    "username": "ibmsayem",
+    "passwordHash": "$2a$12$OXirRwZBI9eQAjD.vH4tNuXOjYaMFJdXpRANvwb6fwdgyHewh2jRS",
+    "firstName": "ibrahim",
+    "lastName": "Sayem",
+    "bio": "",
+    "profilePicture": "",
+    "isVerified": false,
+    "createdAt": "2026-03-31T18:56:50.420Z",
+    "updatedAt": "2026-03-31T18:56:50.420Z"
+  },
+  {
+    "id": "b2c0f98a-27c6-4516-b668-4f87b901fb04",
+    "email": "abc@gmail.com",
+    "username": "abc",
+    "passwordHash": "$2a$12$cDflZP1kduffHZ8QdQJYVes9wyaWNDM9.lRwprKcbJPkpmfZ6M5X.",
+    "firstName": "abc",
+    "lastName": "def",
+    "bio": "",
+    "profilePicture": "",
+    "isVerified": false,
+    "createdAt": "2026-03-31T19:56:51.889Z",
+    "updatedAt": "2026-03-31T19:56:51.889Z"
+  }
+]

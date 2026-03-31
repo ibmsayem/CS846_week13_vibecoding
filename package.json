@@ -1,0 +1,16 @@
+{
+  "name": "twittcs846",
+  "version": "1.0.0",
+  "description": "Twitter-like application for CS846",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "nodemon twitter-auth-app/backend/server.js",
+    "dev:frontend": "npm start --prefix twitter-auth-app/frontend"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "concurrently": "^8.0.1",
+    "nodemon": "^3.0.1"
+  }
+}

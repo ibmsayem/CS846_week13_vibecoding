@@ -1,0 +1,2 @@
+# This directory stores persistent data files
+# users.json - Persists user accounts between server restarts

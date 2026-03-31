@@ -1,0 +1,5 @@
+build a twitter like project using a guidelines discussed in the class
+Features:
+    1. first signup and login
+    2. create user profile
+
