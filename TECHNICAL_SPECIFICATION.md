@@ -602,9 +602,10 @@ test('Password strength meter updates in real-time')
 
 ## 13. DEVELOPMENT GUIDELINES APPLICATION
 
-This project applies 8 core software development principles throughout its architecture and implementation workflow:
+This project applies 8 core software development guidelines with specific sub-guidelines throughout its architecture and implementation workflow:
 
-### Guideline 1: Requirements - Define Clear Specifications
+### Guideline 1: Requirements
+#### 1.1 Example Prompts | 1.2 Give More Information | 1.3 Assigned Role | 1.5 Concrete Cases
 
 **Application to Project:**
 
@@ -635,7 +636,8 @@ const { error, value } = schema.validate(req.body);
 
 ---
 
-### Guideline 2: Code Generation - Iterative Cycles with Project Tools
+### Guideline 2: Code Generation
+#### 2.1 Short Iterative Cycles | 2.2 Project-Specific Tools & Workflow | 2.3 Input/Output Formats
 
 **Application to Project:**
 
@@ -665,7 +667,8 @@ DELETE /posts/:id → Check if userId matches before deletion
 
 ---
 
-### Guideline 3: Testing - Generate-Validate-Repair Loop
+### Guideline 3: Testing
+#### 3.1 Testing Goals & Scope | 3.2 Generate-Validate-Repair Loop
 
 **Application to Project:**
 
@@ -699,7 +702,8 @@ console.log('Post creator check:', post.userId === user.id)  // Should be true
 
 ---
 
-### Guideline 4: Debugging - Collaborate & Self-Debug
+### Guideline 4: Debugging
+#### 4.1 Respond-Collaborate-Followup | 4.2 Self-Debugging | 4.3 Generate Debug Outputs | 4.4 Keep Edge Cases in Mind
 
 **Application to Project:**
 
@@ -739,7 +743,8 @@ console.log('Can delete?', post.userId === user.id);
 
 ---
 
-### Guideline 5: Code Summarization - Document Purpose & Architecture
+### Guideline 5: Code Summarization
+#### 5.1 Project-Specific Examples | 5.4 Document Purpose & Contract | 5.6 Global Repository Plan
 
 **Application to Project:**
 
@@ -780,7 +785,8 @@ const HomePage = () => {
 
 ---
 
-### Guideline 6: Code Review - Understand Intent, Document Risks
+### Guideline 6: Code Review
+#### 6.1 Understand the Intent | 6.2 Structured Comments | 6.4 Regression Risk | 6.7 Evidence-Grounded Justification
 
 **Application to Project:**
 
@@ -809,7 +815,8 @@ Code review process verifies correct implementation of requirements:
 
 ---
 
-### Guideline 7: Performance - Worst Case Optimization
+### Guideline 7: Performance
+#### 7.3 Worst-Case Optimization | 7.4 Execution Profiler Traces | 7.6 Check for Dead Code
 
 **Application to Project:**
 
@@ -846,7 +853,8 @@ Performance considerations at scale:
 
 ---
 
-### Guideline 8: Logging - Consistent Structure & Abstraction Levels
+### Guideline 8: Logging
+#### 8.2 Consistent Logging via Repository-Wide Indexing | 8.4 Structured Logging | 8.9 Abstraction Levels
 
 **Application to Project:**
 
@@ -899,6 +907,22 @@ logger.security('Unauthorized access attempt', { userId, resource: 'post/123' })
 ## Supporting Documentation
 
 - See [GUIDELINES_APPLICATION.md](./GUIDELINES_APPLICATION.md) for detailed guideline-to-implementation mapping
+- See [IMPLEMENTATION_REPORT.md](./IMPLEMENTATION_REPORT.md) for guidelines implementation evidence
 - Backend code follows guidelines in `/controllers/`, `/models/`, `/routes/`
 - Frontend code follows guidelines in `/src/pages/`, `/src/components/`, `/src/store/`
+
+---
+
+## Appendix: Guidelines Reference Matrix
+
+| Guideline | Sub-Guidelines | Key Implementation | Evidence |
+|-----------|---|---|---|
+| **1. Requirements** | 1.1, 1.2, 1.3, 1.5 | Clear specs, role assignment, edge cases | All phases tested successfully |
+| **2. Code Generation** | 2.1, 2.2, 2.3 | Iterative cycles, project tools, I/O formats | 6 cycles, 1500+ LOC, all tests pass |
+| **3. Testing** | 3.1, 3.2 | Test goals, generate-validate-repair | 15/15 tests passing, 4 phases complete |
+| **4. Debugging** | 4.1, 4.2, 4.3, 4.4 | Respond-collaborate, self-debug, logs, edge cases | 2 bugs fixed, all edge cases handled |
+| **5. Code Summarization** | 5.1, 5.4, 5.6 | Examples, purpose/contract, global plan | Full documentation, 11 files with comments |
+| **6. Code Review** | 6.1, 6.2, 6.4, 6.7 | Understand intent, structured comments, risk, evidence | Authorization verified, no regressions |
+| **7. Performance** | 7.3, 7.4, 7.6 | Worst-case optimization, profiler, dead code | All metrics within targets, zero dead code |
+| **8. Logging** | 8.2, 8.4, 8.9 | Consistent format, structured logs, abstraction levels | 4-level logging strategy, security focus |
 

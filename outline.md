@@ -33,29 +33,26 @@ Generation
 cases in mind”
 
 5. Code summarization
-    1. Provide Project-Specific Examples of Code Summaries and Context for
+    1. guideline 1: Provide Project-Specific Examples of Code Summaries and Context for
 functions/files
-    2. Document Purpose and Contract, Not Implementation
-    3. Develop a global plan for the entire repository.
+    2. guideline 4: Document Purpose and Contract, Not Implementation
+    3. guideline 6: Develop a global plan for the entire repository.
 
 6. Code review
-    1. Understand the Intent Before You Review
-    2. Write Structured Review Comments 
-    3. Assess Regression Risk as Part of Every Review Decision
-    5. Require Evidence-Grounded Justification Before Accepting
+    1. guideline 1: Understand the Intent Before You Review
+    2. guideline 2: Write Structured Review Comments 
+    3. guideline 4: Assess Regression Risk as Part of Every Review Decision
+    5. guideline 7: Require Evidence-Grounded Justification Before Accepting
 LLM Claims
 
 7. performance
-    1. Explicitly ask it to optimize for worst-case input size while preserving correctness
-    2. Use Execution Profiler Traces for Optimizing a Program
-    3. Check for Dead Code Before Optimizing 
+    1. guideline 3: Explicitly ask it to optimize for worst-case input size while preserving correctness
+    2. guideline 4: Use Execution Profiler Traces for Optimizing a Program
+    3. guideline 6: Check for Dead Code Before Optimizing 
 
 8. Logging
-    1. Enforce consistent log via Repository-Wide
+    1. guideline 2: Enforce consistent log via Repository-Wide
     Indexing and Custom Instructions
-    2. Implement Structured Logging with Standardized
+    2. guideline 4: Implement Structured Logging with Standardized
         Formats
-    3. Log at Appropriate Abstraction Levels
-
-
-
+    3. guideline 9: Log at Appropriate Abstraction Levels

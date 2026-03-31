@@ -12,12 +12,23 @@ This document details how each of the 8 software development guidelines was appl
 
 ---
 
-## 1. Requirements Analysis Guidelines
+## Guideline 1: Requirements
 
-### 1.1 Guideline Definition
+### 1.1 Guideline 1.1: Example Prompts
 - **Principle**: Provide comprehensive example prompts with elaboration
-- **Role**: Assign senior-level software architect responsibilities
-- **Action**: Proactively identify edge cases and failure scenarios
+- **Sub-Guidelines**: Structure requirements with specific user stories
+
+### 1.2 Guideline 1.2: Additional Information
+- **Principle**: Elaborate on requirements with "What, Where, How, Why"
+- **Sub-Guidelines**: Add context for uncertain requirements
+
+### 1.3 Guideline 1.3: Role Assignment  
+- **Principle**: Assign senior-level software architect responsibilities
+- **Sub-Guidelines**: Specify that LLM acts as experienced developer
+
+### 1.5 Guideline 1.5: Edge Cases
+- **Principle**: Proactively identify concrete cases when things can go wrong
+- **Sub-Guidelines**: Request specific failure scenarios before implementation
 
 ### 1.2 Application in Project
 
@@ -60,12 +71,19 @@ Each prompt was expanded with:
 
 ---
 
-## 2. Code Generation Guidelines
+## Guideline 2: Code Generation
 
-### 2.1 Guideline Definition
+### 2.1 Guideline 2.1: Short Iterative Cycles
 - **Principle**: Work in short, iterative cycles
-- **Specification**: Define project-specific tools and workflow mechanics
-- **Format**: Specify input types and output formats
+- **Sub-Guidelines**: Generate-Test-Refine-Deploy workflow
+
+### 2.2 Guideline 2.2: Project-Specific Tools & Workflow
+- **Principle**: Specify project-specific tools and workflow execution mechanics
+- **Sub-Guidelines**: Define backend/frontend stacks and middleware chains
+
+### 2.3 Guideline 2.3: Input/Output Formats
+- **Principle**: Specify input types and output formats explicitly
+- **Sub-Guidelines**: Document API contracts, state shapes, and data flows
 
 ### 2.2 Application in Project
 
@@ -132,12 +150,15 @@ Output: [ { id, userId, content, userName, createdAt, ... } ]
 
 ---
 
-## 3. Testing Guidelines
+## Guideline 3: Testing
 
-### 3.1 Guideline Definition
-- **Scope**: Specify testing goal and scope upfront
-- **Approach**: Use Generate-Validate-Repair loop
-- **Method**: Avoid one-shot generation
+### 3.1 Guideline 3.1: Testing Goals & Scope
+- **Principle**: Specify testing goal and scope upfront
+- **Sub-Guidelines**: Define what features to test and success criteria
+
+### 3.2 Guideline 3.2: Generate-Validate-Repair Loop
+- **Principle**: Use iterative loop instead of one-shot generation
+- **Sub-Guidelines**: Generate → Validate with tests → Repair issues → Retest
 
 ### 3.2 Application in Project
 
@@ -208,12 +229,23 @@ Revalidate: curl test passed ✅
 
 ---
 
-## 4. Debugging Guidelines
+## Guideline 4: Debugging
 
-### 4.1 Guideline Definition
-- **Process**: Respond-Collaborate-Followup
-- **Method**: Self-debug with generated outputs
-- **Mindset**: Keep edge cases in mind
+### 4.1 Guideline 4.1: Respond-Collaborate-Followup
+- **Principle**: Three-phase debugging approach
+- **Sub-Guidelines**: Identify symptom → Investigate → Verify fix
+
+### 4.2 Guideline 4.2: Self-Debugging
+- **Principle**: Debug using generated logs and traces
+- **Sub-Guidelines**: Add console.log, inspect state, trace flows
+
+### 4.3 Guideline 4.3: Generate Debug Outputs
+- **Principle**: Create detailed debug information
+- **Sub-Guidelines**: Structured logging, audit trails, state dumps
+
+### 4.4 Guideline 4.4: Edge Cases in Mind
+- **Principle**: Keep edge cases in focus during debugging
+- **Sub-Guidelines**: Test null/undefined, empty states, concurrent operations
 
 ### 4.2 Application in Project
 
@@ -288,7 +320,7 @@ console.log('post.userId:', "b2c0f98a-...");
 
 ---
 
-## 5. Code Summarization Guidelines
+## Guideline 5: Code Summarization
 
 ### 5.1 Guideline Definition
 - **Document**: Purpose and contract, not implementation
@@ -375,7 +407,7 @@ static createPost({ userId, content, userName, userEmail, firstName, lastName })
 
 ---
 
-## 6. Code Review Guidelines
+## Guideline 6: Code Review
 
 ### 6.1 Guideline Definition
 - **Intent**: Understand intent before reviewing
@@ -528,7 +560,7 @@ if (post.userId !== userId) {
 
 ---
 
-## 8. Logging Guidelines
+## Guideline 8: Logging
 
 ### 8.1 Guideline Definition
 - **Repository-Wide**: Enforce consistent logging via indexing
